@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^static(/[\s\S]+)', views.static),
     url(r'^resolve', views.index),
+    url(r'^get-cards', views.render_cards),
     url(r'^admin/', admin.site.urls),
 ]

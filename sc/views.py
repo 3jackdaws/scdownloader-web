@@ -42,14 +42,16 @@ def static(request, path):
     response = HttpResponse(text, content_type=content_type)
     return response
 
-# @csrf_exempt
-# def get_tracks(request):
-#     track_ids = request.POST.get("tracks")
-#     tracks = []
-#
-#     for track_id in track_ids:
-#         try:
-#             track = Track.objects.get(id=track_id)
-#         except:
-#             track =
+def render_cards(request):
+    url = request.GET.get('url')
+    key = request.GET.get('key')
 
+    if url:
+        response = soundcloud.resolve(url)
+    else:
+        response = None
+    context = {
+        "json":json.dumps(response),
+        "track":response
+    }
+    return render(request, 'components/cards.html', context)

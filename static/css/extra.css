@@ -1,0 +1,16 @@
+nav{
+    background-color: #313E49 !important;
+}
+
+.cover-image{
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100px;
+    max-height: 100%;
+}
+
+input.validate:focus{
+
+    border-bottom: #ffa000 !important;
+}

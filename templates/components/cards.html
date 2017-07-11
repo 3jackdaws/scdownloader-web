@@ -1,0 +1,14 @@
+<div class="card horizontal blue-grey darken-3 ">
+    <div class="cover-image" style="background-image: url('{{ track.artwork_url }}')">
+
+    </div>
+    <div class="card-stacked">
+        <div class="card-content" style="text-align: left">
+            <h5 style="margin-top: 0"><span class="yellow-text text-darken-4">{{ track.user.username }}</span><br>{{ track.title }}</h5>
+            <p>{{ track.description }}</p>
+        </div>
+        <div class="card-action">
+            <button class="btn amber darken-2 waves-effect waves-light left" onclick="getTrack('{{ track.id }}')">GET</button>
+        </div>
+    </div>
+</div>

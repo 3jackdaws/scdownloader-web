@@ -6,10 +6,11 @@
     <title>Soundcloud Downloader | soundcloud.isogen.net</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/materialize.min.css">
+    <link rel="stylesheet" href="/static/css/extra.css">
 
 </head>
 <body>
-    <nav>
+    <nav class="blue-grey darken-4">
         <div class="nav-wrapper">
             <div class="container">
                 <a href="/" class="brand-logo">SC</a>
@@ -20,26 +21,71 @@
             </div>
         </div>
     </nav>
-    <div class="container">
-        <div class="col s12 m7">
-            <div class="card horizontal">
-                <div class="card-image">
-                    <img src="https://lorempixel.com/100/190/nature/6">
-                </div>
-                <div class="card-stacked">
-                    <div class="card-content">
-                        <p>I am a very simple card. I am good at containing small bits of information.</p>
+    <div class="section blue-grey darken-4">
+        <div class="container" style="color: white; text-align: center; max-width: 600px;">
+            <h4>Soundcloud Downloader</h4>
+            <h6>Enter a track or playlist url below</h6>
+            <form onsubmit="event.preventDefault()">
+                <div class="row">
+                    <div class="input-field" style="border-bottom-color: #ffa000">
+                        <input id="url" type="url" class="validate">
+                        <label for="url" data-error="Invalid URL">Track URL</label>
                     </div>
-                    <div class="card-action">
-                        <a href="#">This is a link</a>
-                    </div>
+                    <div class="waves-effect waves-light btn amber darken-2" onclick="resolve(event)">RESOLVE</div>
                 </div>
+            </form>
+
+            <span> * * * </span>
+
+            <div id="cards">
+
             </div>
+
+
         </div>
     </div>
 
+    <footer class="page-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Footer Content</h5>
+                    <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer
+                        content.</p>
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">Links</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2014 Copyright Text
+                <span class="grey-text text-lighten-4 right">Part of <a class="grey-text text-lighten-4" href="https://isogen.net">ISOGEN.NET</a></span>
+            </div>
+        </div>
+    </footer>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="/static/js/materialize.min.js"></script>
+    <script>
+        function resolve(event) {
+            var input = document.getElementById("url");
+            if(input.classList.contains("valid")){
+                var url = input.value;
+                $.get('/get-cards?url=' + encodeURI(url), function (data) {
+                    document.getElementById("cards").innerHTML = data;
+                })
+            }
+
+        }
+    </script>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="/static/js/materialize.min.js"></script>
 </body>
 </html>
