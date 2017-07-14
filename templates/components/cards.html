@@ -5,7 +5,6 @@
     <div class="card-stacked">
         <div class="card-content" style="text-align: left">
             <h5 style="margin-top: 0"><span class="yellow-text text-darken-4">{{ track.user.username }}</span><br>{{ track.title }}</h5>
-{#            <p>{{ track.description | default_if_none:"" }}</p>#}
             <span class="likes-and-plays blue-grey-text text-lighten-1"><i class="fa fa-play"></i>{{ track.playback_count }}<i class="fa fa-heart"></i>{{ track.likes_count }}</span>
         </div>
         <div class="card-action">

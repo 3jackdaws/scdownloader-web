@@ -2,17 +2,24 @@ nav{
     background-color: #313E49 !important;
 }
 
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    margin: 0;
+    padding-bottom: 6rem;
+    min-height: 100%;
+}
+
 .cover-image{
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
     width: 100px;
     max-height: 100%;
-}
-
-input.validate:focus{
-
-    border-bottom: #ffa000 !important;
 }
 
 span.likes-and-plays{
@@ -29,4 +36,31 @@ span.likes-and-plays{
 i.fa{
     margin-right: 5px;
     margin-left: 10px;
+}
+
+.drag-drop-overlay{
+    position: fixed;
+    height: 300px;
+    display: flex;
+    right:0;
+    left:0;
+    margin: 0 auto;
+    background-color: red;
+    width: 300px;
+    top: 33%;
+}
+
+.display-none{
+    display: none;
+}
+
+.page-footer {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+}
+
+#cards{
+    min-height: 200px;
 }

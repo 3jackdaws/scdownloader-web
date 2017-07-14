@@ -37,19 +37,19 @@ def get_stream_resource_from(url):
 
 def get_300px_album_art(track_object):
     art_url = track_object['artwork_url']  # type: str
-    return art_url.replace('large', 't300x300')
+    return art_url.replace('large', 't300x300') if art_url else None
 
 def embed_artwork(audio:mutagen.File, artwork_url):
-    print(artwork_url)
-    audio.tags.add(
-        mutagen.id3.APIC(
-            encoding=3,
-            mime='image/jpeg',
-            type=3,
-            desc=u'Cover',
-            data=urlopen(artwork_url).read()
+    if artwork_url:
+        audio.tags.add(
+            mutagen.id3.APIC(
+                encoding=3,
+                mime='image/jpeg',
+                type=3,
+                desc=u'Cover',
+                data=urlopen(artwork_url).read()
+            )
         )
-    )
     return audio
 
 def set_artist_title(audio:mutagen.File, artist, title):

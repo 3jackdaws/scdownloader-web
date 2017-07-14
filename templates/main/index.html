@@ -10,77 +10,97 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
-<body style="min-height: 100vh; position: relative; overflow: hidden" class="blue-grey darken-4">
-    <nav class="blue-grey darken-4">
-        <div class="nav-wrapper">
-            <div class="container">
-                <a href="/" class="brand-logo">SC</a>
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/about">About</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="section blue-grey darken-4" style="margin-bottom: 420px;">
+<body class="blue-grey darken-4">
+
+    <div class="section blue-grey darken-4" style="">
         <div class="container" style="color: white; text-align: center; max-width: 600px;">
             <h4>Soundcloud Downloader</h4>
-            <h6>Enter a track or playlist url below</h6>
+            <h6>Enter a track url below</h6>
             <form onsubmit="event.preventDefault()">
                 <div class="row">
-                    <div class="input-field" style="border-bottom-color: #ffa000">
-                        <input id="url" type="url" class="validate">
+                    <div class="input-field large">
+                        <input id="url" type="url" class="" placeholder="">
                         <label for="url" data-error="Invalid URL">Track URL</label>
                     </div>
                     <div class="waves-effect waves-light btn amber darken-2" onclick="resolve(event)">RESOLVE</div>
                 </div>
             </form>
-
             <span> * * * </span>
-
             <div id="cards">
 
             </div>
-
-
+            <div id="loader" class="preloader-wrapper small" style="margin:50px;">
+                <div class="spinner-layer spinner-green-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <footer class="page-footer blue-grey darken-4">
+        <div class="container blue-grey-text" style="height: 100%;display: flex; justify-content: space-between; align-items: center; padding: 40px 0;">
+            <div style="text-align: center">
+                <i class="large fa fa-music"></i>
+                <br>
+                Fetch Track
+                <br>
+                &nbsp;
+            </div>
 
-    <footer class="page-footer blue-grey darken-3" style="position: relative; bottom: 0;left:0;width: 100%">
-        <div class="container">
-            <div class="row">
-                <div class="col l6 s12">
-                    <h5 class="white-text">Footer Content</h5>
-                    <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer
-                        content.</p>
-                </div>
-                <div class="col l4 offset-l2 s12">
-                    <h5 class="white-text">Links</h5>
-                    <ul>
-                        <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                        <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-                        <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-                        <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
-                    </ul>
-                </div>
+            <i class="medium fa fa-arrow-right"></i>
+            <div style="text-align: center">
+                <i class="large fa fa-smile-o"></i>
+                <br>
+                Write Metadata<br> (artist & title)
             </div>
+            <i class="medium fa fa-arrow-right"></i>
+            <div style="text-align: center">
+                <i class="large fa fa-picture-o"></i>
+                <br>
+                Embed Artwork
+                <br>
+                &nbsp;
+            </div>
+
         </div>
-        <div class="footer-copyright blue-grey darken-4">
+        <div class="footer-copyright blue-grey darken-3  blue-grey-text text-lighten-1" style="width: 100%">
             <div class="container">
-                © 2014 Copyright Text
-                <span class="grey-text text-lighten-4 right">Part of <a class="grey-text text-lighten-4" href="https://isogen.net">ISOGEN.NET</a></span>
+                <span class="left">Part of <a class="white-text darken-1" href="https://isogen.net">isogen.net</a></span>
+                <span class="right"><a class="white-text darken-1" href="mailto:soundcloud@isogen.net">soundcloud@isogen.net</a></span>
             </div>
         </div>
+
+
+
+
     </footer>
 
     <script>
+        var CardsContainer;
+        var UpdateInterval;
+        var ProgressSpinner;
+        window.addEventListener("load", function () {
+            CardsContainer = document.getElementById("cards");
+            ProgressSpinner = document.getElementById("loader");
+            ProgressSpinner.classList.add("active");
+            ProgressSpinner.parentNode.removeChild(ProgressSpinner);
+        });
         function resolve(event) {
             var input = document.getElementById("url");
-            if(input.classList.contains("valid")){
-                var url = input.value;
+            var url = input.value;
 
+            if(url.search("soundcloud") != -1){
+                CardsContainer.innerHTML = "";
+            CardsContainer.appendChild(ProgressSpinner.cloneNode(true));
                 $.get('/get-cards?url=' + encodeURI(url), function (data) {
-                    document.getElementById("cards").innerHTML = data;
+                    CardsContainer.innerHTML = data;
                     var dlButton = document.getElementById('download-button');
                     var id = dlButton.getAttribute("trackid");
                     dlButton.innerHTML = "Preparing";
@@ -96,20 +116,32 @@
 
         }
 
-        var UpdateInterval = null;
+
         function checkStatus(id){
             console.log(id);
             $.get('/status/' + id, function(track){
                 console.log(track);
-                if(track.ready){
-
-                    document.getElementById('download-button').innerHTML = "GET";
+                if(track.status === "ready"){
+                    document.getElementById('download-button').innerHTML = "DOWNLOAD - " + track.size;
                     clearInterval(UpdateInterval);
                 }else{
                     checkStatus(id);
                 }
             });
         }
+
+        window.addEventListener("dragover", function (e) {
+            e = e || event;
+            e.preventDefault();
+        }, false);
+        window.addEventListener("drop", function (e) {
+            e = e || event;
+            e.preventDefault();
+            var input = document.getElementById("url");
+            console.log(e);
+            input.value = e.dataTransfer.getData("text");
+            input.parentNode.querySelector('label').classList.add("active");
+        }, false);
     </script>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
