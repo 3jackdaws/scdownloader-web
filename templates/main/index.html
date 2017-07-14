@@ -7,9 +7,10 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/materialize.min.css">
     <link rel="stylesheet" href="/static/css/extra.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
-<body>
+<body style="min-height: 100vh; position: relative; overflow: hidden" class="blue-grey darken-4">
     <nav class="blue-grey darken-4">
         <div class="nav-wrapper">
             <div class="container">
@@ -21,7 +22,7 @@
             </div>
         </div>
     </nav>
-    <div class="section blue-grey darken-4">
+    <div class="section blue-grey darken-4" style="margin-bottom: 420px;">
         <div class="container" style="color: white; text-align: center; max-width: 600px;">
             <h4>Soundcloud Downloader</h4>
             <h6>Enter a track or playlist url below</h6>
@@ -45,7 +46,7 @@
         </div>
     </div>
 
-    <footer class="page-footer">
+    <footer class="page-footer blue-grey darken-3" style="position: relative; bottom: 0;left:0;width: 100%">
         <div class="container">
             <div class="row">
                 <div class="col l6 s12">
@@ -64,7 +65,7 @@
                 </div>
             </div>
         </div>
-        <div class="footer-copyright">
+        <div class="footer-copyright blue-grey darken-4">
             <div class="container">
                 © 2014 Copyright Text
                 <span class="grey-text text-lighten-4 right">Part of <a class="grey-text text-lighten-4" href="https://isogen.net">ISOGEN.NET</a></span>
@@ -77,11 +78,37 @@
             var input = document.getElementById("url");
             if(input.classList.contains("valid")){
                 var url = input.value;
+
                 $.get('/get-cards?url=' + encodeURI(url), function (data) {
                     document.getElementById("cards").innerHTML = data;
+                    var dlButton = document.getElementById('download-button');
+                    var id = dlButton.getAttribute("trackid");
+                    dlButton.innerHTML = "Preparing";
+                    UpdateInterval = setInterval(function () {
+                        dlButton.innerHTML += ".";
+                        if (dlButton.innerHTML == "Preparing...") {
+                            dlButton.innerHTML = "Preparing";
+                        }
+                    }, 1000);
+                    checkStatus(id);
                 })
             }
 
+        }
+
+        var UpdateInterval = null;
+        function checkStatus(id){
+            console.log(id);
+            $.get('/status/' + id, function(track){
+                console.log(track);
+                if(track.ready){
+
+                    document.getElementById('download-button').innerHTML = "GET";
+                    clearInterval(UpdateInterval);
+                }else{
+                    checkStatus(id);
+                }
+            });
         }
     </script>
 

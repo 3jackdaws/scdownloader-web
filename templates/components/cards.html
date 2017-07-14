@@ -5,10 +5,12 @@
     <div class="card-stacked">
         <div class="card-content" style="text-align: left">
             <h5 style="margin-top: 0"><span class="yellow-text text-darken-4">{{ track.user.username }}</span><br>{{ track.title }}</h5>
-            <p>{{ track.description }}</p>
+{#            <p>{{ track.description | default_if_none:"" }}</p>#}
+            <span class="likes-and-plays blue-grey-text text-lighten-1"><i class="fa fa-play"></i>{{ track.playback_count }}<i class="fa fa-heart"></i>{{ track.likes_count }}</span>
         </div>
         <div class="card-action">
-            <button class="btn amber darken-2 waves-effect waves-light left" onclick="getTrack('{{ track.id }}')">GET</button>
+            <a id="download-button" class="btn amber darken-2 waves-effect waves-light left" href="/track/{{ track.id }}/{{ track.filename }}" download trackid="{{ track.id }}">GET</a>
+            <span id="download-status" class="right blue-grey-text" style="line-height: 36px; min-width: 50px; min-height: 50px;">{{ track.duration }}</span>
         </div>
     </div>
 </div>

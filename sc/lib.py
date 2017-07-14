@@ -61,18 +61,15 @@ def set_artist_title(audio:mutagen.File, artist, title):
     audio.tags.add(frame)
     return audio
 
-def normalize(filename):
-    audio = AudioSegment.from_file(filename, "mp3")
-    normalized_sound = match_target_amplitude(audio, -10.0)
-    normalized_sound.export(filename[:-4] + "-norm.mp3", format="mp3")
 
 def get_track_artist(track_obj):
     return track_obj['user']['username']
 
-def track_to_file(track_obj):
+
+def track_to_file(track_obj, filename):
+    print("Downloading %s" % filename)
     title = track_obj['title']
     artist = get_track_artist(track_obj)
-    filename = DOWNLOAD_DIR + "%s - %s.mp3" % (artist, title)
     file = open(filename, "wb+")
     stream_url = get_http_stream_url(track_obj['id'])
     stream = urlopen(stream_url)

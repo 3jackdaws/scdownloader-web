@@ -14,3 +14,19 @@ input.validate:focus{
 
     border-bottom: #ffa000 !important;
 }
+
+span.likes-and-plays{
+    position: absolute;
+    top:0;
+    right:0;
+    margin: 24px;
+}
+
+.card-content{
+    position: relative;
+}
+
+i.fa{
+    margin-right: 5px;
+    margin-left: 10px;
+}
