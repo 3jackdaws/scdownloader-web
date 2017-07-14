@@ -25,6 +25,14 @@ def get_http_stream_url(track_id):
         print(e)
         return None
 
+def track_from(id):
+    url = "https://api.soundcloud.com/i1/tracks/%s?client_id=%s" % (str(id), CLIENT_ID)
+    try:
+        return get_url(url)['http_mp3_128_url']
+    except Exception as e:
+        print(e)
+        return None
+
 
 def resolve(url):
     resolve_url = "https://api-v2.soundcloud.com/resolve?url=%s&client_id=%s&app_version=1499347238" % (url, CLIENT_ID)

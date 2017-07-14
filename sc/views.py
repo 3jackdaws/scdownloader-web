@@ -3,7 +3,7 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 
 from sc.settings import STATIC_ROOT
-from sc.utilities import spawn_worker, hr_base10, send_file, duration_to_hms, hr_filesize
+from sc.utilities import spawn_worker, hr_base10, send_file, duration_to_hms, hr_filesize, ObjectCache, track_downloading, track_exists
 from time import sleep
 
 from django.views.decorators.csrf import csrf_exempt
@@ -11,6 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 from sc.models import Track
 
 import sc.lib as soundcloud
+
+
 
 
 
@@ -23,6 +25,17 @@ COMPLETE_DIR = DOWNLOAD_DIR + "done/"
 for path in [DOWNLOAD_DIR, COMPLETE_DIR, INCOMPLETE_DIR]:
     if not os.path.exists(path):
         os.mkdir(path)
+
+
+tracks = ObjectCache("tracks")
+
+def queue_track_download(id):
+    id = int(id)
+    track = None
+    if id in tracks:
+        track = tracks[id]
+    else:
+        track = soundcloud.tr
 
 def fetch_track(track):
     filename = INCOMPLETE_DIR + "%s.mp3" % track['id']
@@ -47,23 +60,40 @@ def static(request, path):
     return response
 
 def api_track_status(request, id):
-    response = {"status":"downloading"}
-    filename = COMPLETE_DIR + "%s.mp3" % id
+    POLL_FREQ = 2.0
+    response = {"status": "downloading"}
+    if track_exists(id):
+        filename = COMPLETE_DIR + "%s.mp3" % id
+        response['status'] = "ready"
+        response['size'] = hr_filesize(os.path.getsize(filename))
+    elif track_downloading(id):
+        for t in range(int(10 * POLL_FREQ)):
+            if track_exists(id):
+                response['status'] = "ready"
+                break
+    else:
+
+
+
+
+
+
+
     for t in range(20):
         if os.path.exists(filename):
-            response['status'] = "ready"
-            response['size'] = hr_filesize(os.path.getsize(filename))
+
             break
         sleep(0.5)
     return json_response(response)
 
 
-workers = {}
+
 def web_get_file(request, id, name):
     filename = COMPLETE_DIR + "%s.mp3" % id
     if os.path.exists(filename):
         return send_file(request, filename, name)
     return HttpResponse(status=404)
+
 
 def render_cards(request):
     url = request.GET.get('url')
@@ -77,6 +107,7 @@ def render_cards(request):
             response['artwork_url'] = soundcloud.get_300px_album_art(response)
             response['filename'] = response['user']['username'] + " - " + response['title'] + ".mp3"
             response['duration'] = duration_to_hms(response['duration'])
+            tracks[str(response['id'])] = response
             spawn_worker(fetch_track, response)
     else:
         response = None
