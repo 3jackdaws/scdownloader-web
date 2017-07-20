@@ -121,11 +121,11 @@
             console.log(id);
             $.get('/status/' + id, function(track){
                 console.log(track);
-                if(track.status === "ready"){
+                if(track.status === "READY"){
                     document.getElementById('download-button').innerHTML = "DOWNLOAD - " + track.size;
                     clearInterval(UpdateInterval);
                 }else{
-                    checkStatus(id);
+                    setTimeout(checkStatus, 1000, id);
                 }
             });
         }

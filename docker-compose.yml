@@ -1,0 +1,12 @@
+version: '3'
+services:
+  web:
+    container_name: sc-web
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - ".:/sc"
+  redis:
+    container_name: sc-redis
+    image: redis:alpine

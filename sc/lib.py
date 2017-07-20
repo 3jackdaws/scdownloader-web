@@ -14,21 +14,23 @@ def get_url(url):
     try:
         return json.loads(urlopen(url).read().decode('utf-8'))
     except Exception as e:
+        print(type(e), str(e))
         return {"error":str(e)}
 
 
 def get_http_stream_url(track_id):
-    url = "https://api.soundcloud.com/i1/tracks/%s/streams?client_id=%s" % (str(track_id), CLIENT_ID)
+    url = "https://api-v2.soundcloud.com/i1/tracks/%s/streams?client_id=%s" % (str(track_id), CLIENT_ID)
     try:
         return get_url(url)['http_mp3_128_url']
     except Exception as e:
         print(e)
         return None
 
+
 def track_from(id):
-    url = "https://api.soundcloud.com/i1/tracks/%s?client_id=%s" % (str(id), CLIENT_ID)
+    url = "https://api-v2.soundcloud.com/tracks/%s?client_id=%s" % (str(id), CLIENT_ID)
     try:
-        return get_url(url)['http_mp3_128_url']
+        return get_url(url)
     except Exception as e:
         print(e)
         return None

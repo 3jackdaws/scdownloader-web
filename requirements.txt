@@ -2,3 +2,4 @@ django
 gunicorn
 PyMySQL
 mutagen
+redis
