@@ -19,7 +19,7 @@ def get_url(url):
 
 
 def get_http_stream_url(track_id):
-    url = "https://api-v2.soundcloud.com/i1/tracks/%s/streams?client_id=%s" % (str(track_id), CLIENT_ID)
+    url = "https://api.soundcloud.com/i1/tracks/%s/streams?client_id=%s" % (str(track_id), CLIENT_ID)
     try:
         return get_url(url)['http_mp3_128_url']
     except Exception as e:

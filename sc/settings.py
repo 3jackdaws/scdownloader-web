@@ -122,4 +122,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR + "/static"
 
-REDIS_HOST = "172.17.0.2"
+REDIS_HOST = "172.17.0.3"
