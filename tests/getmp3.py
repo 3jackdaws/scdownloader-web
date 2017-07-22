@@ -30,6 +30,7 @@ def check_equivalent(track_url):
     album_artwork = urlopen(soundcloud.get_300px_album_art(track)).read()
     assert album_artwork == audio.tags["APIC:Cover"].data
     os.remove(TEMP_FILE)
+    print(track)
 
 for url in TEST_TRACKS:
     try:

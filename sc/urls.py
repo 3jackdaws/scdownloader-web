@@ -20,7 +20,7 @@ from sc import views
 urlpatterns = [
     url(r'^$', views.index),
     url(r'^static(/[\s\S]+)', views.static),
-    # url(r'^resolve', views.index),
+    url(r'^get-media', views.get_media),
     url(r'^get-cards', views.render_cards),
     url(r'^track/([0-9]+)/(.*)', views.web_get_file),
     url(r'^status/([0-9]+)', views.api_track_status),

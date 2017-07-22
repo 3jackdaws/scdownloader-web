@@ -75,3 +75,11 @@ def render_cards(request):
         "track":response
     }
     return render(request, 'components/cards.html', context)
+
+
+def get_media(request):
+    url = request.GET.get("url")
+    track = Track.from_url(url)
+    track.prepare()
+    return send_file(request, track.path, track['user']['username'] + " - " + track['title'] + ".mp3")
+
