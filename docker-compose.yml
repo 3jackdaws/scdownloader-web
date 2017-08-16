@@ -4,7 +4,7 @@ services:
     container_name: sc-web
     build: .
     ports:
-      - "80:80"
+      - "9005:80"
     volumes:
       - ".:/sc"
   redis:
